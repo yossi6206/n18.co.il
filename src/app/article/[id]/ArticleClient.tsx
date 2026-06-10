@@ -6,6 +6,8 @@ import { ThumbsUp, ThumbsDown, Share2, ArrowRight } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Article } from "@/data/articles";
+import { db } from "@/lib/firebase";
+import { doc, updateDoc, increment } from "firebase/firestore";
 
 interface ArticleClientProps {
   article: Article;
@@ -14,38 +16,64 @@ interface ArticleClientProps {
 }
 
 export function ArticleClient({ article, recommendedArticles, breadcrumbs }: ArticleClientProps) {
-  // Reaction State
-  const [likes, setLikes] = useState(14);
-  const [dislikes, setDislikes] = useState(2);
+  // Reaction State loaded dynamically from database values
+  const [likes, setLikes] = useState(article.likes ?? 14);
+  const [dislikes, setDislikes] = useState(article.dislikes ?? 2);
   const [hasLiked, setHasLiked] = useState(false);
   const [hasDisliked, setHasDisliked] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
 
-  // Handle Likes/Dislikes
-  const handleLike = () => {
+  // Handle Likes/Dislikes synced with Firestore
+  const handleLike = async () => {
+    const articleRef = doc(db, "articles", String(article.id));
     if (hasLiked) {
       setLikes((prev) => prev - 1);
       setHasLiked(false);
+      try {
+        await updateDoc(articleRef, { likes: increment(-1) });
+      } catch (err) {
+        console.error("Failed to update likes in Firestore:", err);
+      }
     } else {
       setLikes((prev) => prev + 1);
       setHasLiked(true);
+      const updates: any = { likes: increment(1) };
       if (hasDisliked) {
         setDislikes((prev) => prev - 1);
         setHasDisliked(false);
+        updates.dislikes = increment(-1);
+      }
+      try {
+        await updateDoc(articleRef, updates);
+      } catch (err) {
+        console.error("Failed to update likes in Firestore:", err);
       }
     }
   };
 
-  const handleDislike = () => {
+  const handleDislike = async () => {
+    const articleRef = doc(db, "articles", String(article.id));
     if (hasDisliked) {
       setDislikes((prev) => prev - 1);
       setHasDisliked(false);
+      try {
+        await updateDoc(articleRef, { dislikes: increment(-1) });
+      } catch (err) {
+        console.error("Failed to update dislikes in Firestore:", err);
+      }
     } else {
       setDislikes((prev) => prev + 1);
       setHasDisliked(true);
+      const updates: any = { dislikes: increment(1) };
       if (hasLiked) {
         setLikes((prev) => prev - 1);
         setHasLiked(false);
+        updates.likes = increment(-1);
+      }
+      try {
+        await updateDoc(articleRef, updates);
+      } catch (err) {
+        console.error("Failed to update dislikes in Firestore:", err);
       }
     }
   };

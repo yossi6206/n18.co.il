@@ -11,6 +11,8 @@ export interface Article {
   paragraphs: string[];
   authorImage?: string;
   commentsCount?: number;
+  likes?: number;
+  dislikes?: number;
 }
 
 export const articles: Article[] = [
@@ -492,4 +494,36 @@ export const articles: Article[] = [
 
 export function getArticleById(id: number): Article | undefined {
   return articles.find(art => art.id === id);
+}
+
+// Firestore helper functions
+import { db } from "@/lib/firebase";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+
+export async function getArticlesFromDb(): Promise<Article[]> {
+  try {
+    const querySnapshot = await getDocs(collection(db, "articles"));
+    const arts: Article[] = [];
+    querySnapshot.forEach((doc) => {
+      arts.push(doc.data() as Article);
+    });
+    return arts.sort((a, b) => b.id - a.id);
+  } catch (error) {
+    console.error("Error fetching articles from Firestore, falling back to mock data:", error);
+    return articles;
+  }
+}
+
+export async function getArticleByIdFromDb(id: number): Promise<Article | undefined> {
+  try {
+    const docRef = doc(db, "articles", String(id));
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data() as Article;
+    }
+    return undefined;
+  } catch (error) {
+    console.error(`Error fetching article ${id} from Firestore, falling back to mock data:`, error);
+    return getArticleById(id);
+  }
 }

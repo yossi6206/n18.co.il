@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
-import { articles } from "../data/articles";
+import { getArticlesFromDb } from "../data/articles";
 import { ArticleCard } from "../components/ArticleCard";
 import { FeaturedArticle } from "../components/FeaturedArticle";
 import { CategorySection } from "../components/CategorySection";
@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   keywords: ["חדשות", "n18", "חדשות n18", "n18 חדשות", "ערוץ n18", "חדשות בזמן אמת", "דיווחים בזמן אמת", "חדשות בארץ"],
 };
 
-export default function Home() {
+export default async function Home() {
+  const articles = await getArticlesFromDb();
   const featuredArticle = articles.find((art) => art.id === 100);
   
   // Filter articles for various sections

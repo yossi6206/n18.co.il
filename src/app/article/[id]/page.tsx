@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { articles, getArticleById } from "@/data/articles";
+import { getArticleByIdFromDb, getArticlesFromDb } from "@/data/articles";
 import { ArticleClient } from "./ArticleClient";
 
 // Dynamic breadcrumb helper
@@ -29,7 +29,7 @@ const getBreadcrumbs = (category: string) => {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   const articleId = parseInt(resolvedParams.id, 10);
-  const article = getArticleById(articleId);
+  const article = await getArticleByIdFromDb(articleId);
 
   if (!article) {
     return {
@@ -80,7 +80,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
   const articleId = parseInt(resolvedParams.id, 10);
-  const article = getArticleById(articleId);
+  const article = await getArticleByIdFromDb(articleId);
 
   if (!article) {
     return (
@@ -106,7 +106,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
   }
 
   const breadcrumbs = getBreadcrumbs(article.category);
-  const recommendedArticles = articles
+  const allArticles = await getArticlesFromDb();
+  const recommendedArticles = allArticles
     .filter((art) => art.id !== article.id)
     .slice(0, 4);
 
