@@ -13,7 +13,7 @@ export default function Home() {
   // Filter articles for various sections
   const gridArticles = articles.filter((art) => art.id !== 100).slice(0, 8);
   const securityArticles = articles.filter((art) => art.category === "בטחוני").slice(0, 4);
-  const politicalArticles = articles.filter((art) => art.category === "פוליטי" && art.id !== 100);
+  const politicalArticles = articles.filter((art) => art.category === "פוליטי" && art.id !== 100).slice(0, 4);
   const economyArticles = articles.filter((art) => art.category === "כלכלה").slice(0, 4);
   const sportsArticles = articles.filter((art) => art.category === "ספורט").slice(0, 4);
   const techArticles = articles.filter((art) => art.category === "טכנולוגיה").slice(0, 4);
@@ -25,7 +25,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <main className="max-w-[1400px] mx-auto p-4 sm:p-6 lg:p-8">
-        {featuredArticle && <FeaturedArticle article={featuredArticle} badgeText="פרסום בלעדי" />}
+        {featuredArticle && <FeaturedArticle article={featuredArticle} badgeText="ארדואן מזהיר" />}
 
         {/* Card Grid Section */}
         <div className="mt-12">

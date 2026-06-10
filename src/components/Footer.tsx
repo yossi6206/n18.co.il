@@ -24,7 +24,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="w-full bg-[#011124] text-slate-300 pt-16 pb-8 border-t-4 border-[#b21c1c] relative select-none" dir="rtl">
+    <footer className="w-full bg-[#011124] text-slate-300 pt-16 pb-8 border-t-4 border-[#b21c1c] relative select-none mt-20" dir="rtl">
       {/* Background elegant pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-950/20 via-transparent to-transparent pointer-events-none" />
 
