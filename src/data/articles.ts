@@ -507,6 +507,7 @@ export async function getArticlesFromDb(): Promise<Article[]> {
     querySnapshot.forEach((doc) => {
       arts.push(doc.data() as Article);
     });
+    if (arts.length === 0) return articles;
     return arts.sort((a, b) => b.id - a.id);
   } catch (error) {
     console.error("Error fetching articles from Firestore, falling back to mock data:", error);
