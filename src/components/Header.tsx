@@ -160,7 +160,7 @@ export function Header() {
         <div className="flex items-center gap-4 lg:gap-6">
 
           {/* N18 Logo */}
-          <Link href="/" className="flex items-center text-white font-sans font-bold text-3xl tracking-tighter leading-none hover:opacity-90 transition-opacity cursor-pointer">
+          <Link href="/" dir="ltr" className="flex items-center text-white font-sans font-bold text-3xl tracking-tighter leading-none hover:opacity-90 transition-opacity cursor-pointer">
             <span className="text-4xl font-extrabold">N</span>
             <span className="text-3xl font-black">18</span>
           </Link>

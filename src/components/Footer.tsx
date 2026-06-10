@@ -35,8 +35,10 @@ export function Footer() {
           <div className="text-center md:text-right">
             {/* N18 Brand Logo */}
             <Link href="/" className="inline-flex items-center text-white font-sans font-bold text-4xl tracking-tighter leading-none hover:opacity-90 transition-opacity">
-              <span className="text-5xl font-extrabold text-white">N</span>
-              <span className="text-4xl font-black text-white">18</span>
+              <div dir="ltr" className="flex items-center">
+                <span className="text-5xl font-extrabold text-white">N</span>
+                <span className="text-4xl font-black text-white">18</span>
+              </div>
               <span className="h-6 w-[2px] bg-[#b21c1c] mx-3 rounded-full" />
               <span className="text-lg font-bold text-slate-300 tracking-normal font-sans">אתר החדשות של ישראל</span>
             </Link>
