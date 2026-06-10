@@ -8,6 +8,7 @@ interface CategorySectionProps {
   moreText: string;
   moreHref?: string;
   articles: Article[];
+  hideTopBorder?: boolean;
 }
 
 export function CategorySection({
@@ -16,9 +17,10 @@ export function CategorySection({
   moreText,
   moreHref = "/",
   articles,
+  hideTopBorder = false,
 }: CategorySectionProps) {
   return (
-    <div id={title} className="mt-16 border-t border-slate-100 pt-10 scroll-mt-20">
+    <div id={title} className="mt-16 pt-10 scroll-mt-20">
       {/* Section Header */}
       <div className="flex items-center justify-between border-b border-slate-200 pb-2 mb-8">
         {/* Right Side: Title + Flame Icon */}
