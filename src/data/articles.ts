@@ -522,7 +522,7 @@ export async function getArticleByIdFromDb(id: number): Promise<Article | undefi
     if (docSnap.exists()) {
       return docSnap.data() as Article;
     }
-    return undefined;
+    return getArticleById(id);
   } catch (error) {
     console.error(`Error fetching article ${id} from Firestore, falling back to mock data:`, error);
     return getArticleById(id);
