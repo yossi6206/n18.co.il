@@ -181,11 +181,6 @@ export function Header() {
             ))}
           </nav>
 
-          {/* "עוד" (More) dropdown pill button */}
-          <button className="hidden sm:flex items-center gap-1 border border-white/40 hover:bg-white/10 rounded-full px-3 py-1 text-white text-xs lg:text-sm font-bold transition-all duration-150 cursor-pointer">
-            <ChevronDown className="w-4 h-4" />
-            <span>עוד</span>
-          </button>
         </div>
 
         {/* Left Side: Search + Date + LIVE */}
