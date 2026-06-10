@@ -60,8 +60,29 @@ const polin = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "N18 | אתר החדשות של ישראל",
-  description: "כל העדכונים, הכתבות, הסקרים והדיווחים בזמן אמת מערוץ N18",
+  title: {
+    default: "N18 | אתר החדשות של ישראל",
+    template: "%s | N18"
+  },
+  description: "כל העדכונים, הכתבות, הסקרים והדיווחים בזמן אמת מערוץ N18 - חדשות, ביטחון, פוליטיקה, כלכלה וספורט.",
+  keywords: ["חדשות", "n18", "חדשות n18", "n18 חדשות", "ערוץ n18", "חדשות בזמן אמת", "חדשות היום", "חדשות בארץ", "דיווחים בזמן אמת"],
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://n18.co.il"),
+  openGraph: {
+    title: "N18 | אתר החדשות של ישראל",
+    description: "כל העדכונים, הכתבות, הסקרים והדיווחים בזמן אמת מערוץ N18",
+    url: "./",
+    siteName: "N18",
+    locale: "he_IL",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "N18 | אתר החדשות של ישראל",
+    description: "כל העדכונים, הכתבות, הסקרים והדיווחים בזמן אמת מערוץ N18",
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "",
+  },
 };
 
 export default function RootLayout({

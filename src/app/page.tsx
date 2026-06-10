@@ -1,11 +1,16 @@
-"use client";
-
+import type { Metadata } from "next";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { articles } from "../data/articles";
 import { ArticleCard } from "../components/ArticleCard";
 import { FeaturedArticle } from "../components/FeaturedArticle";
 import { CategorySection } from "../components/CategorySection";
+
+export const metadata: Metadata = {
+  title: "N18 | אתר החדשות של ישראל - חדשות, ביטחון, פוליטיקה, כלכלה וספורט",
+  description: "כל העדכונים, הכתבות, הסקרים והדיווחים בזמן אמת מערוץ N18. הצטרפו לשידורים החיים ולדיווחים השוטפים של נבחרת הכתבים המובילה בישראל.",
+  keywords: ["חדשות", "n18", "חדשות n18", "n18 חדשות", "ערוץ n18", "חדשות בזמן אמת", "דיווחים בזמן אמת", "חדשות בארץ"],
+};
 
 export default function Home() {
   const featuredArticle = articles.find((art) => art.id === 100);
@@ -42,6 +47,7 @@ export default function Home() {
           bulletColor="#EE8F00"
           moreText="עוד בטחוני"
           articles={securityArticles}
+          hideTopBorder={true}
         />
 
         {/* Category Section: פוליטי */}
