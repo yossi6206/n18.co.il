@@ -6,6 +6,8 @@ import { ArticleCard } from "../components/ArticleCard";
 import { FeaturedArticle } from "../components/FeaturedArticle";
 import { CategorySection } from "../components/CategorySection";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "N18 | אתר החדשות של ישראל - חדשות, ביטחון, פוליטיקה, כלכלה וספורט",
   description: "כל העדכונים, הכתבות, הסקרים והדיווחים בזמן אמת מערוץ N18. הצטרפו לשידורים החיים ולדיווחים השוטפים של נבחרת הכתבים המובילה בישראל.",
