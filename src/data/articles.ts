@@ -13,6 +13,7 @@ export interface Article {
   commentsCount?: number;
   likes?: number;
   dislikes?: number;
+  badgeText?: string;
 }
 
 export const articles: Article[] = [
