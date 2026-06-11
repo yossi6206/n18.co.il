@@ -25,6 +25,8 @@ const getBreadcrumbs = (category: string) => {
   }
 };
 
+export const revalidate = 60;
+
 // Next.js dynamic metadata generation
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
