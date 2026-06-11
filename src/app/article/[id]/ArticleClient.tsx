@@ -7,7 +7,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Article } from "@/data/articles";
 import { db } from "@/lib/firebase";
-import { doc, updateDoc, increment } from "firebase/firestore";
+import { doc, setDoc, increment } from "firebase/firestore";
+import { CommentsSection } from "@/components/CommentsSection";
 
 interface ArticleClientProps {
   article: Article;
@@ -30,7 +31,7 @@ export function ArticleClient({ article, recommendedArticles, breadcrumbs }: Art
       setLikes((prev) => prev - 1);
       setHasLiked(false);
       try {
-        await updateDoc(articleRef, { likes: increment(-1) });
+        await setDoc(articleRef, { likes: increment(-1) }, { merge: true });
       } catch (err) {
         console.error("Failed to update likes in Firestore:", err);
       }
@@ -44,7 +45,7 @@ export function ArticleClient({ article, recommendedArticles, breadcrumbs }: Art
         updates.dislikes = increment(-1);
       }
       try {
-        await updateDoc(articleRef, updates);
+        await setDoc(articleRef, updates, { merge: true });
       } catch (err) {
         console.error("Failed to update likes in Firestore:", err);
       }
@@ -57,7 +58,7 @@ export function ArticleClient({ article, recommendedArticles, breadcrumbs }: Art
       setDislikes((prev) => prev - 1);
       setHasDisliked(false);
       try {
-        await updateDoc(articleRef, { dislikes: increment(-1) });
+        await setDoc(articleRef, { dislikes: increment(-1) }, { merge: true });
       } catch (err) {
         console.error("Failed to update dislikes in Firestore:", err);
       }
@@ -71,7 +72,7 @@ export function ArticleClient({ article, recommendedArticles, breadcrumbs }: Art
         updates.likes = increment(-1);
       }
       try {
-        await updateDoc(articleRef, updates);
+        await setDoc(articleRef, updates, { merge: true });
       } catch (err) {
         console.error("Failed to update dislikes in Firestore:", err);
       }
@@ -211,6 +212,9 @@ export function ArticleClient({ article, recommendedArticles, breadcrumbs }: Art
                 </p>
               ))}
             </div>
+
+            {/* Comments Section */}
+            <CommentsSection articleId={article.id} initialCommentsCount={article.commentsCount || 0} />
 
           </div>
 
