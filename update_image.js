@@ -7,7 +7,7 @@ const db = getFirestore();
 
 async function run() {
   const ref = db.collection("articles").doc("100");
-  await ref.update({ image: "/ChatGPT Image Jun 11, 2026, 07_56_08 AM-c.webp" });
+  await ref.update({ image: "/iran_trump_conflict_new.webp" });
   console.log("✅ Updated image for article 100");
   process.exit(0);
 }
