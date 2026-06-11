@@ -31,7 +31,7 @@ export default async function Home() {
 
       {/* Hero Section */}
       <main className="max-w-[1400px] mx-auto p-4 sm:p-6 lg:p-8">
-        {featuredArticle && <FeaturedArticle article={featuredArticle} badgeText="ארדואן מזהיר" />}
+        {featuredArticle && <FeaturedArticle article={featuredArticle} badgeText="ארה\"ב תוקפת באיראן" />}
 
         {/* Card Grid Section */}
         <div className="mt-12">
