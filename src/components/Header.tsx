@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ChevronDown, Search, Menu, X } from "lucide-react";
+import { ChevronDown, Search, Menu, X, User } from "lucide-react";
 import { articles } from "../data/articles";
 
 
@@ -194,6 +194,15 @@ export function Header() {
             <Search className="w-5 h-5 stroke-[2.5]" />
           </button>
 
+          {/* Login Icon */}
+          <Link
+            href="/login"
+            className="text-white hover:text-white/80 transition-colors cursor-pointer p-1"
+            title="כניסה לאזור האישי"
+          >
+            <User className="w-5 h-5 stroke-[2.5]" />
+          </Link>
+
           {/* Hebrew Date */}
           <div className="text-xs lg:text-sm font-bold text-white/90 hidden md:block whitespace-nowrap">
             {hebrewDate}
@@ -231,6 +240,15 @@ export function Header() {
               {link.name}
             </Link>
           ))}
+          <Link
+            href="/login"
+            className="flex items-center gap-2 text-white/95 hover:text-white font-bold text-sm py-2 px-3 hover:bg-white/5 rounded-lg transition-colors border border-white/20"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <User className="w-4 h-4" />
+            <span>התחברות למערכת</span>
+          </Link>
+
           <button className="flex w-full items-center justify-between border border-white/40 hover:bg-white/10 rounded-lg px-3 py-2 text-white text-sm font-bold transition-all duration-150 cursor-pointer">
             <span>עוד קטגוריות</span>
             <ChevronDown className="w-4 h-4" />
