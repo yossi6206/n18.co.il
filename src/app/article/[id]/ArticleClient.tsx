@@ -1,14 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ThumbsUp, ThumbsDown, Share2, ArrowRight } from "lucide-react";
+import { ThumbsUp, ThumbsDown, Share2, ArrowRight, Pencil } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Article } from "@/data/articles";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { doc, setDoc, increment } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import { CommentsSection } from "@/components/CommentsSection";
+
+// Account allowed to edit articles (mirrors Firestore security rules).
+const ADMIN_EMAIL = "yossi6206@gmail.com";
 
 interface ArticleClientProps {
   article: Article;
@@ -23,6 +27,15 @@ export function ArticleClient({ article, recommendedArticles, breadcrumbs }: Art
   const [hasLiked, setHasLiked] = useState(false);
   const [hasDisliked, setHasDisliked] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Show the edit shortcut only to the signed-in admin account.
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsAdmin((user?.email ?? "").toLowerCase() === ADMIN_EMAIL);
+    });
+    return () => unsubscribe();
+  }, []);
 
   // Handle Likes/Dislikes synced with Firestore
   const handleLike = async () => {
@@ -258,6 +271,19 @@ export function ArticleClient({ article, recommendedArticles, breadcrumbs }: Art
 
         </div>
       </main>
+
+      {/* Admin-only floating edit shortcut */}
+      {isAdmin && (
+        <Link
+          href={`/admin/article/${article.id}`}
+          className="fixed bottom-6 left-6 z-50 inline-flex items-center gap-2 bg-slate-900 text-white font-bold py-3 px-5 rounded-full shadow-xl hover:bg-slate-800 active:scale-95 transition-all"
+          title="עריכת הכתבה"
+        >
+          <Pencil className="w-4 h-4" />
+          ערוך כתבה
+        </Link>
+      )}
+
       <Footer />
     </div>
   );

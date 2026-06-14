@@ -46,6 +46,13 @@ function getHebrewError(code: string): string {
       return "בעיית חיבור לרשת. בדוק את החיבור לאינטרנט";
     case "auth/popup-closed-by-user":
       return "החלון נסגר לפני השלמת ההתחברות";
+    case "auth/operation-not-allowed":
+      return "הרשמה באימייל וסיסמה אינה מופעלת. יש להפעיל אותה ב-Firebase Console";
+    case "auth/admin-restricted-operation":
+      return "ההרשמה מוגבלת. בדוק את הגדרות ההרשמה ב-Firebase Console";
+    case "auth/api-key-not-valid.-please-pass-a-valid-api-key.":
+    case "auth/invalid-api-key":
+      return "מפתח ה-API של Firebase אינו תקין. בדוק את הגדרות הסביבה";
     default:
       return "אירעה שגיאה. אנא נסה שנית";
   }
@@ -121,7 +128,8 @@ export default function LoginPage() {
         setSuccess("נשלח קישור לאיפוס הסיסמה לכתובת האימייל שהזנת.");
       }
     } catch (err: any) {
-      setError(getHebrewError(err?.code || ""));
+      console.error("Auth error:", err?.code, err?.message, err);
+      setError(getHebrewError(err?.code || "") + (err?.code ? ` (${err.code})` : ""));
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +143,8 @@ export default function LoginPage() {
       await signInWithPopup(auth, provider);
       router.push("/");
     } catch (err: any) {
-      setError(getHebrewError(err?.code || ""));
+      console.error("Google Auth error:", err?.code, err?.message, err);
+      setError(getHebrewError(err?.code || "") + (err?.code ? ` (${err.code})` : ""));
     } finally {
       setIsLoading(false);
     }
