@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ChevronDown, Search, Menu, X, User } from "lucide-react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import { articles } from "../data/articles";
 
 
@@ -87,7 +89,18 @@ export function Header() {
   const [hebrewDate, setHebrewDate] = useState("שלישי, כ״ד בסיוון תשפ״ו");
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
+
+  // Logged-in users go straight to the admin dashboard; guests to the login page.
+  const accountHref = isLoggedIn ? "/admin" : "/login";
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const openSearch = () => {
     setIsSearchOpen(true);
@@ -196,9 +209,9 @@ export function Header() {
 
           {/* Login Icon */}
           <Link
-            href="/login"
+            href={accountHref}
             className="text-white hover:text-white/80 transition-colors cursor-pointer p-1"
-            title="כניסה לאזור האישי"
+            title={isLoggedIn ? "מעבר לאזור הניהול" : "כניסה לאזור האישי"}
           >
             <User className="w-5 h-5 stroke-[2.5]" />
           </Link>
@@ -241,12 +254,12 @@ export function Header() {
             </Link>
           ))}
           <Link
-            href="/login"
+            href={accountHref}
             className="flex items-center gap-2 text-white/95 hover:text-white font-bold text-sm py-2 px-3 hover:bg-white/5 rounded-lg transition-colors border border-white/20"
             onClick={() => setMobileMenuOpen(false)}
           >
             <User className="w-4 h-4" />
-            <span>התחברות למערכת</span>
+            <span>{isLoggedIn ? "אזור הניהול" : "התחברות למערכת"}</span>
           </Link>
 
           <button className="flex w-full items-center justify-between border border-white/40 hover:bg-white/10 rounded-lg px-3 py-2 text-white text-sm font-bold transition-all duration-150 cursor-pointer">

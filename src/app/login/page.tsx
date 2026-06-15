@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, FormEvent } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -22,6 +22,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   updateProfile,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
@@ -71,6 +72,14 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  // If the user is already authenticated, skip the login form and go to admin.
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) router.replace("/admin");
+    });
+    return () => unsubscribe();
+  }, [router]);
+
   const validateForm = (): boolean => {
     setError(null);
 
@@ -115,14 +124,14 @@ export default function LoginPage() {
     try {
       if (mode === "login") {
         await signInWithEmailAndPassword(auth, email, password);
-        router.push("/");
+        router.push("/admin");
       } else if (mode === "register") {
         const credential = await createUserWithEmailAndPassword(auth, email, password);
         if (name.trim()) {
           await updateProfile(credential.user, { displayName: name.trim() });
         }
         setSuccess("ההרשמה בוצעה בהצלחה! מעביר אותך למערכת...");
-        setTimeout(() => router.push("/"), 1500);
+        setTimeout(() => router.push("/admin"), 1500);
       } else if (mode === "forgot") {
         await sendPasswordResetEmail(auth, email);
         setSuccess("נשלח קישור לאיפוס הסיסמה לכתובת האימייל שהזנת.");
@@ -141,7 +150,7 @@ export default function LoginPage() {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-      router.push("/");
+      router.push("/admin");
     } catch (err: any) {
       console.error("Google Auth error:", err?.code, err?.message, err);
       setError(getHebrewError(err?.code || "") + (err?.code ? ` (${err.code})` : ""));
