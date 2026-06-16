@@ -10,8 +10,10 @@ import {
   ShieldAlert,
   Loader2,
   Star,
+  ImageIcon,
 } from "lucide-react";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
+import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import { Article } from "@/data/articles";
 
 // Only this account may access the dashboard. Mirrors the editor's gate and the
@@ -34,6 +36,32 @@ function Centered({ children }: { children: React.ReactNode }) {
 export function AdminDashboardClient({ featured }: { featured: Article | null }) {
   const [access, setAccess] = useState<AccessState>("checking");
   const [userEmail, setUserEmail] = useState<string>("");
+  const [migrationStatus, setMigrationStatus] = useState<string | null>(null);
+  const [migrating, setMigrating] = useState(false);
+
+  async function fixImagePaths() {
+    setMigrating(true);
+    setMigrationStatus(null);
+    try {
+      const snapshot = await getDocs(collection(db, "articles"));
+      let updated = 0;
+      for (const docSnap of snapshot.docs) {
+        const data = docSnap.data();
+        const updates: Record<string, string> = {};
+        if (data.image?.endsWith(".png")) updates.image = data.image.replace(".png", ".webp");
+        if (data.authorImage?.endsWith(".png")) updates.authorImage = data.authorImage.replace(".png", ".webp");
+        if (Object.keys(updates).length > 0) {
+          await updateDoc(doc(db, "articles", docSnap.id), updates);
+          updated++;
+        }
+      }
+      setMigrationStatus(`הצלחה! עודכנו ${updated} כתבות.`);
+    } catch (e) {
+      setMigrationStatus(`שגיאה: ${String(e)}`);
+    } finally {
+      setMigrating(false);
+    }
+  }
 
   // Auth gate: only the admin account is allowed in.
   useEffect(() => {
@@ -193,6 +221,34 @@ export function AdminDashboardClient({ featured }: { featured: Article | null })
               לא נמצאה כתבה ראשית.
             </div>
           )}
+        </section>
+
+        {/* One-time image migration tool */}
+        <section className="mt-10">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <ImageIcon className="w-4 h-4 text-slate-500" />
+                <h2 className="text-sm font-black text-slate-700">תיקון נתיבי תמונות (PNG → WebP)</h2>
+              </div>
+              <p className="text-xs text-slate-500">
+                מעדכן את כל שדות image ו-authorImage ב-Firestore מ-.png ל-.webp
+              </p>
+              {migrationStatus && (
+                <p className={`mt-2 text-xs font-bold ${migrationStatus.startsWith("שגיאה") ? "text-red-600" : "text-green-600"}`}>
+                  {migrationStatus}
+                </p>
+              )}
+            </div>
+            <button
+              onClick={fixImagePaths}
+              disabled={migrating}
+              className="inline-flex items-center gap-2 bg-slate-800 text-white text-sm font-bold py-2.5 px-4 rounded-xl hover:bg-slate-700 transition-colors disabled:opacity-50"
+            >
+              {migrating ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
+              {migrating ? "מעדכן..." : "הרץ תיקון"}
+            </button>
+          </div>
         </section>
       </main>
     </div>
