@@ -145,7 +145,7 @@ export function ArticleClient({ article, recommendedArticles, breadcrumbs }: Art
               <div className="flex items-center gap-2.5">
                 <div className="w-10 h-10 rounded-full overflow-hidden border border-slate-200">
                   <img
-                    src={article.authorImage || "/politicians_chat.png"}
+                    src={article.authorImage || "/politicians_chat.webp"}
                     alt={article.author}
                     className="w-full h-full object-cover"
                   />

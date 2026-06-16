@@ -342,7 +342,7 @@ export function EditorClient({ articleId, initialArticle }: EditorClientProps) {
                 onChange={(e) => updateField("authorImage", e.target.value)}
                 className={inputClass}
                 dir="ltr"
-                placeholder="/iran_us_conflict.png"
+                placeholder="/iran_us_conflict.webp"
               />
               <ImagePreview src={form.authorImage} />
             </div>
